@@ -2,6 +2,11 @@ package net.catstack.polish
 
 import java.lang.RuntimeException
 
+/**
+ * Класс для представления обратной польской записи. В конструктор передаётся формула в инфиксной нотации,
+ * которая будет преобразована в обратную польскую запись.
+ * @param formula - формула в инфиксной нотации
+ */
 class PolishNotation(formula: String) {
     val notation = arrayListOf<Token>()
     val operators = ArrayDeque<Token>()
@@ -29,6 +34,9 @@ class PolishNotation(formula: String) {
         }
     }
 
+    /**
+     * Метод решения формулы
+     */
     fun resolve(): Float {
         val stack = ArrayDeque<Float>()
 
@@ -47,8 +55,15 @@ class PolishNotation(formula: String) {
         return stack.removeLast()
     }
 
+    /**
+     * Преобразование формулы в строку
+     */
     override fun toString() = notation.joinToString(" ") { it.name }
 
+    /**
+     * Обработка символа, как число
+     * @param numberBuilder - StringBuilder, который собирает число
+     */
     private fun Char.processSymbolAsNumber(numberBuilder: StringBuilder) {
         if (this.isDigit() || this == '.')
             numberBuilder.append(this)
@@ -61,6 +76,10 @@ class PolishNotation(formula: String) {
         }
     }
 
+    /**
+     * Обработка символа, как функции
+     * @param functionBuilder - StringBuilder, который собирает функцию
+     */
     private fun Char.processSymbolAsFunction(functionBuilder: StringBuilder) {
         if (this.isLetter())
             functionBuilder.append(this)
@@ -79,6 +98,9 @@ class PolishNotation(formula: String) {
         }
     }
 
+    /**
+     * Обработка символа, как оператора
+     */
     private fun Char.processSymbolAsOperator() {
         if (this == '.' || this == ' ' || this == '(' || this == ')' || this.isLetterOrDigit())
             return
@@ -101,6 +123,9 @@ class PolishNotation(formula: String) {
         }
     }
 
+    /**
+     * Обработка символа, как скобки
+     */
     private fun Char.processSymbolAsParenthesis() {
         when (this) {
             '(' -> {
